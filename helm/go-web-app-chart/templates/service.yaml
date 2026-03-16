@@ -1,0 +1,15 @@
+# A Service provides a stable network endpoint to access Pods, because Pods have dynamic IP addresses that change frequently.
+apiVersion: v1 #stable API for Services
+kind: Service #This tells Kubernetes what type of resource you want to create.
+metadata: # Metadata contains identification information. 
+  name: go-web-app-service #used for commands like: kubectl get service go-web-app-service
+  labels: #Labels are key-value pairs used for grouping resources.
+    app: go-web-app #kubectl get service -l app=go-web-app
+spec: #spec defines the desired state of the Service
+  ports: #This defines the ports that the service will expose.
+  - port: 80 #This is the port that the service will listen on. It can be any valid port number.This is the service port used inside the cluster.
+    targetPort: 8080  #This is the port on which the application inside the container listens. It should match the containerPort defined in the Deployment.
+    protocol: TCP #This is the protocol used for communication. TCP is the most common protocol for web applications.
+  selector: #Selector is used to associate the Service with the Pods. It matches the labels defined in the Deployment.  
+    app: go-web-app-pod   #This should match the label defined in the Deployment for the pods. [ Important rule: selector label = pod label ]
+  type: ClusterIP #This is the default service type. It creates a virtual IP inside the cluster to expose the service. It is only accessible within the cluster.  
